@@ -25,16 +25,37 @@ const BG_WHITE_GRADIENT = `linear-gradient(115deg, ${WHITE}, ${WHITE})`;
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
+  const videos = document.querySelectorAll("video");
+  console.log({ videos });
+  let loadedVideos = 0;
+  videos.forEach((video) => {
+    video.addEventListener("loadeddata", () => {
+      loadedVideos++;
+      console.log({ loadedVideos });
+      console.log(video.querySelector("source")!.src);
+      if (loadedVideos === videos.length) {
+        // All videos have finished loading
+        console.log("All videos have finished loading!");
+      }
+    });
+  });
+
   typeWriterIntro();
   let swiper = buildSwiper();
-  swiperController(swiper);
-  functionalitySuiteComponent();
-  laptopOpening();
+  initAnimations()
+    .then(() => {
+      console.info("finished loading animations");
+      swiperController(swiper);
+      functionalitySuiteComponent();
+      laptopOpening();
+    })
+    .catch((error) => {
+      console.error("error loading animations");
+    });
 
   const laptopVideos = document.querySelectorAll(
     '[wb-data="laptop-video"]'
   ) as NodeListOf<HTMLVideoElement>;
-
   function functionalitySuiteComponent() {
     const bulletRows = document.querySelectorAll(
       ".bullet-row"
@@ -198,31 +219,27 @@ window.Webflow.push(() => {
   }
 
   function laptopOpening() {
-    gsap.set(".laptop-screen-wrap", { opacity: 0 });
-    initAnimations()
-      .then(() => {
-        //console.log('Initialized lottie animations');
-        const LOTTIE_DURATION = 1.7;
-        ScrollTrigger.create({
-          trigger: ".swiper-control-wrap",
-          start: "top bottom",
-          onToggle: () => {
-            gsap.set(".laptop-screen-wrap", {
-              opacity: 1,
-              delay: LOTTIE_DURATION,
-              onComplete: () => {
-                laptopVideos.forEach(
-                  (laptopVideo) => (laptopVideo.currentTime = 0)
-                );
-                console.log("reset video time");
-              },
-            });
+    //gsap.set(".laptop-screen-wrap", { opacity: 0 });
+
+    //console.log('Initialized lottie animations');
+    const LOTTIE_DURATION = 1.5;
+    ScrollTrigger.create({
+      trigger: ".swiper-control-wrap",
+      start: "top bottom",
+      onToggle: () => {
+        //console.log("toggle video wrap opacity");
+        gsap.set(".laptop-screen-wrap", {
+          opacity: 1,
+          delay: LOTTIE_DURATION,
+          onComplete: () => {
+            laptopVideos.forEach(
+              (laptopVideo) => (laptopVideo.currentTime = 0)
+            );
+            console.log("reset video time");
           },
         });
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      },
+    });
   }
 
   function swiperController(swiper: Swiper) {
