@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/utils/initAnimations.ts"],
+  "sourcesContent": ["async function animationLoaded(animation) {\n  if (animation.isLoaded) {\n    return true;\n  }\n\n  return new Promise((resolve, reject) => {\n    animation.addEventListener(\"DOMLoaded\", () => {\n      resolve(true);\n    });\n  });\n}\n\n// Return a promise that resolves to true once all animations are loaded\nasync function waitForAnimationsLoaded(animations) {\n  await Promise.all(animations.map(animationLoaded));\n}\n\nexport async function initAnimations() {\n  const lottie = Webflow.require(\"lottie\").lottie;\n  const animations = lottie.getRegisteredAnimations();\n  await waitForAnimationsLoaded(animations);\n}\n"],
+  "mappings": "MAAA,eAAeA,EAAgBC,EAAW,CACxC,OAAIA,EAAU,SACL,GAGF,IAAI,QAAQ,CAACC,EAASC,IAAW,CACtCF,EAAU,iBAAiB,YAAa,IAAM,CAC5CC,EAAQ,EAAI,CACd,CAAC,CACH,CAAC,CACH,CAGA,eAAeE,EAAwBC,EAAY,CACjD,MAAM,QAAQ,IAAIA,EAAW,IAAIL,CAAe,CAAC,CACnD,CAEA,eAAsBM,GAAiB,CAErC,IAAMD,EADS,QAAQ,QAAQ,QAAQ,EAAE,OACf,wBAAwB,EAClD,MAAMD,EAAwBC,CAAU,CAC1C",
+  "names": ["animationLoaded", "animation", "resolve", "reject", "waitForAnimationsLoaded", "animations", "initAnimations"]
+}
