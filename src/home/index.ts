@@ -33,7 +33,7 @@ window.Webflow.push(() => {
     video.addEventListener("loadeddata", () => {
       loadedVideos++;
       console.log({ loadedVideos });
-      video.pause();
+      //video.pause();
       console.log(video.querySelector("source")!.src);
       if (loadedVideos === videos.length) {
         // All videos have finished loading
@@ -43,18 +43,18 @@ window.Webflow.push(() => {
   });
 
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      let video = entry.target as HTMLVideoElement;
-      if (entry.isIntersecting) {
-        // Play the video when it comes into view
+    for (let i = 0; i < entries.length; i++) {
+      let video = entries[i].target as HTMLVideoElement;
+      if (i >= 2 && i <= 6) {
+        break;
+      } else if (entries[i].isIntersecting) {
         video.play();
         console.log(`playing ${video}`);
       } else {
-        // Pause the video when it goes out of view
         video.pause();
         console.log(`pausing ${video}`);
       }
-    });
+    }
   });
 
   // Observe the video element
