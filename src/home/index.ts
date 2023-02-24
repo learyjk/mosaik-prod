@@ -47,7 +47,7 @@ window.Webflow.push(() => {
       console.info("finished loading animations");
       swiperController(swiper);
       functionalitySuiteComponent();
-      //laptopOpening();
+      laptopOpening();
     })
     .catch((error) => {
       console.error("error loading animations");
@@ -218,29 +218,18 @@ window.Webflow.push(() => {
     return swiperMain;
   }
 
-  //   function laptopOpening() {
-  //     //gsap.set(".laptop-screen-wrap", { opacity: 0 });
-
-  //     //console.log('Initialized lottie animations');
-  //     const LOTTIE_DURATION = 1.5;
-  //     ScrollTrigger.create({
-  //       trigger: ".swiper-control-wrap",
-  //       start: "top bottom",
-  //       onToggle: () => {
-  //         //console.log("toggle video wrap opacity");
-  //         gsap.set(".laptop-screen-wrap", {
-  //           //opacity: 1,
-  //           delay: LOTTIE_DURATION,
-  //           onComplete: () => {
-  //             laptopVideos.forEach(
-  //               (laptopVideo) => (laptopVideo.currentTime = 0)
-  //             );
-  //             console.log("reset video time");
-  //           },
-  //         });
-  //       },
-  //     });
-  //   }
+  function laptopOpening() {
+    const LOTTIE_DURATION = 1.5;
+    ScrollTrigger.create({
+      trigger: ".swiper-control-wrap",
+      start: "top bottom+=1px",
+      onToggle: () => {
+        setTimeout(() => {
+          laptopVideos[0].currentTime = 0;
+        }, LOTTIE_DURATION - 0.1);
+      },
+    });
+  }
 
   function swiperController(swiper: Swiper) {
     let activeIndex = 0;
