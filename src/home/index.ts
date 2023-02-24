@@ -25,6 +25,7 @@ const BG_WHITE_GRADIENT = `linear-gradient(115deg, ${WHITE}, ${WHITE})`;
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
+  //loading videos
   const videos = document.querySelectorAll("video");
   console.log({ videos });
   let loadedVideos = 0;
@@ -32,6 +33,7 @@ window.Webflow.push(() => {
     video.addEventListener("loadeddata", () => {
       loadedVideos++;
       console.log({ loadedVideos });
+      video.pause();
       console.log(video.querySelector("source")!.src);
       if (loadedVideos === videos.length) {
         // All videos have finished loading
@@ -40,14 +42,32 @@ window.Webflow.push(() => {
     });
   });
 
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      let video = entry.target as HTMLVideoElement;
+      if (entry.isIntersecting) {
+        // Play the video when it comes into view
+        video.play();
+        console.log(`playing ${video}`);
+      } else {
+        // Pause the video when it goes out of view
+        video.pause();
+        console.log(`pausing ${video}`);
+      }
+    });
+  });
+
+  // Observe the video element
+  videos.forEach((video) => observer.observe(video));
+
   typeWriterIntro();
+  functionalitySuiteComponent();
   let swiper = buildSwiper();
   initAnimations()
     .then(() => {
       console.info("finished loading animations");
       swiperController(swiper);
-      functionalitySuiteComponent();
-      laptopOpening();
+      //laptopOpening();
     })
     .catch((error) => {
       console.error("error loading animations");
@@ -218,18 +238,18 @@ window.Webflow.push(() => {
     return swiperMain;
   }
 
-  function laptopOpening() {
-    const LOTTIE_DURATION = 1.5;
-    ScrollTrigger.create({
-      trigger: ".swiper-control-wrap",
-      start: "top bottom+=1px",
-      onToggle: () => {
-        setTimeout(() => {
-          laptopVideos[0].currentTime = 0;
-        }, LOTTIE_DURATION - 0.1);
-      },
-    });
-  }
+  //   function laptopOpening() {
+  //     const LOTTIE_DURATION = 1.5;
+  //     ScrollTrigger.create({
+  //       trigger: ".swiper-control-wrap",
+  //       start: "top bottom+=1px",
+  //       onToggle: () => {
+  //         setTimeout(() => {
+  //           laptopVideos[0].currentTime = 0;
+  //         }, LOTTIE_DURATION - 0.1);
+  //       },
+  //     });
+  //   }
 
   function swiperController(swiper: Swiper) {
     let activeIndex = 0;
