@@ -25,23 +25,7 @@ const BG_WHITE_GRADIENT = `linear-gradient(115deg, ${WHITE}, ${WHITE})`;
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
-  //loading videos
-  const videos = document.querySelectorAll("video");
-  console.log({ videos });
-  let loadedVideos = 0;
-  videos.forEach((video) => {
-    video.addEventListener("loadeddata", () => {
-      loadedVideos++;
-      console.log({ loadedVideos });
-      //video.pause();
-      console.log(video.querySelector("source")!.src);
-      if (loadedVideos === videos.length) {
-        // All videos have finished loading
-        console.log("All videos have finished loading!");
-      }
-    });
-  });
-
+  // pasue videos when offscreen, play when onscreen
   const observer = new IntersectionObserver((entries) => {
     for (let i = 0; i < entries.length; i++) {
       let video = entries[i].target as HTMLVideoElement;
@@ -49,16 +33,37 @@ window.Webflow.push(() => {
         break;
       } else if (entries[i].isIntersecting) {
         video.play();
-        console.log(`playing ${video}`);
+        //console.log(`playing ${video}`);
       } else {
         video.pause();
-        console.log(`pausing ${video}`);
+        //console.log(`pausing ${video}`);
       }
     }
   });
 
+  //loading videos
+  const allVideos = document.querySelectorAll("video");
+  console.log({ videos: allVideos });
+  let loadedVideos = 0;
+  allVideos.forEach((video) => {
+    observer.observe(video);
+    //video.addEventListener("canplay", handleVideoCanPlay);
+    //video.addEventListener("canplaythrough", handleVideoCanPlayThrough);
+  });
+
+  function handleVideoCanPlay(event) {}
+
+  function handleVideoCanPlayThrough(event) {
+    loadedVideos++;
+    console.log({ loadedVideos });
+    if (loadedVideos === allVideos.length) {
+      // All videos have finished loading
+      console.log("All videos have finished loading!");
+    }
+  }
+
   // Observe the video element
-  videos.forEach((video) => observer.observe(video));
+  // allVideos.forEach((video) => observer.observe(video));
 
   typeWriterIntro();
   functionalitySuiteComponent();
@@ -67,7 +72,7 @@ window.Webflow.push(() => {
     .then(() => {
       console.info("finished loading animations");
       swiperController(swiper);
-      //laptopOpening();
+      laptopOpening();
     })
     .catch((error) => {
       console.error("error loading animations");
@@ -76,6 +81,7 @@ window.Webflow.push(() => {
   const laptopVideos = document.querySelectorAll(
     '[wb-data="laptop-video"]'
   ) as NodeListOf<HTMLVideoElement>;
+
   function functionalitySuiteComponent() {
     const bulletRows = document.querySelectorAll(
       ".bullet-row"
@@ -103,12 +109,12 @@ window.Webflow.push(() => {
           })
           .to(target, {
             opacity: 1,
-            duration: 10,
+            duration: 5,
             yPercent: 0,
           })
           .to(target, {
             opacity: 1,
-            duration: 10,
+            duration: 5,
             yPercent: 0,
           })
           .to(target, {
@@ -125,7 +131,7 @@ window.Webflow.push(() => {
         trigger: ".sticky-wrapper",
         start: "top top",
         end: "bottom bottom",
-        scrub: 1,
+        scrub: 0.5,
       },
       defaults: {
         ease: "none",
@@ -138,7 +144,7 @@ window.Webflow.push(() => {
         trigger: ".sticky-wrapper",
         start: "top top",
         end: "bottom bottom",
-        scrub: 1,
+        scrub: 0.5,
       },
       defaults: {
         ease: "none",
@@ -190,6 +196,12 @@ window.Webflow.push(() => {
         backgroundImage: BG_REDORANGE_GRADIENT,
       });
       //gsap.to(videoWrappers[stepNumber], { opacity: 1 });
+      console.log("reset video times");
+      allVideos.forEach((video, index) => {
+        if (index >= 2 && index <= 6) {
+          video.currentTime = 0;
+        }
+      });
     }
   }
 
@@ -238,18 +250,19 @@ window.Webflow.push(() => {
     return swiperMain;
   }
 
-  //   function laptopOpening() {
-  //     const LOTTIE_DURATION = 1.5;
-  //     ScrollTrigger.create({
-  //       trigger: ".swiper-control-wrap",
-  //       start: "top bottom+=1px",
-  //       onToggle: () => {
-  //         setTimeout(() => {
-  //           laptopVideos[0].currentTime = 0;
-  //         }, LOTTIE_DURATION - 0.1);
-  //       },
-  //     });
-  //   }
+  function laptopOpening() {
+    const LOTTIE_DURATION = 1.7;
+    ScrollTrigger.create({
+      trigger: ".swiper-control-wrap",
+      start: "top bottom",
+      onToggle: () => {
+        setTimeout(() => {
+          console.log(`set time ${LOTTIE_DURATION} seconds!`);
+          laptopVideos[0].currentTime = 0;
+        }, LOTTIE_DURATION * 1000);
+      },
+    });
+  }
 
   function swiperController(swiper: Swiper) {
     let activeIndex = 0;
