@@ -26,46 +26,47 @@ const BG_WHITE_GRADIENT = `linear-gradient(115deg, ${WHITE}, ${WHITE})`;
 window.Webflow ||= [];
 window.Webflow.push(() => {
   // pasue videos when offscreen, play when onscreen
-  const observer = new IntersectionObserver((entries) => {
-    for (let i = 0; i < entries.length; i++) {
-      let video = entries[i].target as HTMLVideoElement;
-      if (i >= 2 && i <= 6) {
-        break;
-      } else if (entries[i].isIntersecting) {
-        video.play();
-        //console.log(`playing ${video}`);
-      } else {
-        video.pause();
-        //console.log(`pausing ${video}`);
-      }
-    }
-  });
+  // const observer = new IntersectionObserver((entries) => {
+  //   for (let i = 0; i < entries.length; i++) {
+  //     let video = entries[i].target as HTMLVideoElement;
+  //     if (i >= 2 && i <= 6) {
+  //       break;
+  //     } else if (entries[i].isIntersecting) {
+  //       video.play();
+  //       //console.log(`playing ${video}`);
+  //     } else {
+  //       video.pause();
+  //       //console.log(`pausing ${video}`);
+  //     }
+  //   }
+  // });
 
   //loading videos
   const allVideos = document.querySelectorAll("video");
-  console.log({ videos: allVideos });
-  let loadedVideos = 0;
-  allVideos.forEach((video) => {
-    observer.observe(video);
-    //video.addEventListener("canplay", handleVideoCanPlay);
-    //video.addEventListener("canplaythrough", handleVideoCanPlayThrough);
-  });
+  // console.log({ videos: allVideos });
+  // let loadedVideos = 0;
+  // allVideos.forEach((video) => {
+  //   observer.observe(video);
+  //   //video.addEventListener("canplay", handleVideoCanPlay);
+  //   //video.addEventListener("canplaythrough", handleVideoCanPlayThrough);
+  // });
 
   function handleVideoCanPlay(event) {}
 
-  function handleVideoCanPlayThrough(event) {
-    loadedVideos++;
-    console.log({ loadedVideos });
-    if (loadedVideos === allVideos.length) {
-      // All videos have finished loading
-      console.log("All videos have finished loading!");
-    }
-  }
+  // function handleVideoCanPlayThrough(event) {
+  //   loadedVideos++;
+  //   console.log({ loadedVideos });
+  //   if (loadedVideos === allVideos.length) {
+  //     // All videos have finished loading
+  //     console.log("All videos have finished loading!");
+  //   }
+  // }
 
   // Observe the video element
   // allVideos.forEach((video) => observer.observe(video));
 
   typeWriterIntro();
+  platformAnimation();
   functionalitySuiteComponent();
   let swiper = buildSwiper();
   initAnimations()
@@ -226,6 +227,48 @@ window.Webflow.push(() => {
     });
   }
 
+  function platformAnimation() {
+    const box = document.querySelector(".animated-text-box");
+    const textItems = box?.querySelectorAll(".animated-text-phrase");
+    if (!box || !textItems) return;
+
+    const totalWidth = getComputedStyle(box).width;
+    const widths = [...textItems].map((item) => getComputedStyle(item).width);
+
+    console.log({ widths });
+
+    let mm = gsap.matchMedia();
+
+    mm.add("(min-width: 992px)", () => {
+      textItems?.forEach((textItem) => {
+        gsap.set(textItem, { opacity: 0, x: "20%", color: RED });
+        gsap.set(box, { x: "25%" });
+      });
+      const textTl = gsap
+        .timeline({ defaults: { ease: "circ.out", duration: 1 } })
+        .to(textItems[0], { x: 0, opacity: 0.8 })
+        .to(box, { x: "12.5%", delay: 0.5 })
+        .to(textItems[0], { color: "#fff" }, "<")
+        .to(textItems[1], { x: 0, opacity: 0.8 }, "<")
+        .to(box, { x: 0, delay: 0.5 })
+        .to(textItems[1], { color: "#fff" }, "<")
+        .to(textItems[2], { x: 0, opacity: 0.8 }, "<");
+    });
+
+    mm.add("(max-width: 991px)", () => {
+      textItems?.forEach((textItem) => {
+        gsap.set(textItem, { opacity: 0, x: "20%", color: RED });
+      });
+      const textTl = gsap
+        .timeline({ defaults: { ease: "circ.out", duration: 1 } })
+        .to(textItems[0], { x: 0, opacity: 0.8 })
+        .to(textItems[0], { color: "#fff" })
+        .to(textItems[1], { x: 0, opacity: 0.8 }, "<")
+        .to(textItems[1], { color: "#fff" })
+        .to(textItems[2], { x: 0, opacity: 0.8 }, "<");
+    });
+  }
+
   function buildSwiper() {
     let swiperMain = new Swiper(".swiper", {
       slidesPerView: 1,
@@ -251,7 +294,7 @@ window.Webflow.push(() => {
   }
 
   function laptopOpening() {
-    const LOTTIE_DURATION = 1.7;
+    const LOTTIE_DURATION = 1.6;
     ScrollTrigger.create({
       trigger: ".swiper-control-wrap",
       start: "top bottom",
