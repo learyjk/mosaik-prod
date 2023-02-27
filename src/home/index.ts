@@ -68,6 +68,7 @@ window.Webflow.push(() => {
   typeWriterIntro();
   platformAnimation();
   functionalitySuiteComponent();
+  pauseMeetMosaikVideoOnClose();
   let swiper = buildSwiper();
   initAnimations()
     .then(() => {
@@ -206,6 +207,34 @@ window.Webflow.push(() => {
     }
   }
 
+  function pauseMeetMosaikVideoOnClose() {
+    const watchFilmButton = document.querySelector("#watch-film-button");
+    const closeButton = document.querySelector("#watch-film-close-button");
+    const meetMosaikVideo =
+      document.querySelector<HTMLVideoElement>("#meet-mosaik-video");
+    if (!meetMosaikVideo) return;
+
+    let hasPlayedOnce = false;
+
+    function handleCanPlay(e) {
+      e.target.play();
+    }
+
+    watchFilmButton?.addEventListener("click", () => {
+      if (!hasPlayedOnce) {
+        meetMosaikVideo.addEventListener("canplay", handleCanPlay);
+        hasPlayedOnce = true;
+      } else {
+        meetMosaikVideo.play();
+      }
+    });
+
+    closeButton?.addEventListener("click", () => {
+      meetMosaikVideo?.pause();
+      meetMosaikVideo.removeEventListener("canplay", handleCanPlay);
+    });
+  }
+
   function typeWriterIntro() {
     document.querySelector(".placeholder-text")?.remove();
     const words = ["Every superhero needs a sidekick..."];
@@ -228,9 +257,12 @@ window.Webflow.push(() => {
   }
 
   function platformAnimation() {
+    console.log("platform animation");
     const box = document.querySelector(".animated-text-box");
     const textItems = box?.querySelectorAll(".animated-text-phrase");
-    if (!box || !textItems) return;
+    const buttons = document.querySelectorAll('[platform-anim="button"]');
+    console.log(buttons);
+    if (!box || !textItems || !buttons) return;
 
     const totalWidth = getComputedStyle(box).width;
     const widths = [...textItems].map((item) => getComputedStyle(item).width);
@@ -245,14 +277,21 @@ window.Webflow.push(() => {
         gsap.set(box, { x: "25%" });
       });
       const textTl = gsap
-        .timeline({ defaults: { ease: "circ.out", duration: 1 } })
+        .timeline({
+          scrollTrigger: {
+            trigger: ".section-platform-where",
+            start: "bottom bottom",
+          },
+          defaults: { ease: "circ.out", duration: 0.8 },
+        })
         .to(textItems[0], { x: 0, opacity: 0.8 })
-        .to(box, { x: "12.5%", delay: 0.5 })
+        .to(box, { x: "12.5%", delay: 0.1 })
         .to(textItems[0], { color: "#fff" }, "<")
         .to(textItems[1], { x: 0, opacity: 0.8 }, "<")
-        .to(box, { x: 0, delay: 0.5 })
+        .to(box, { x: 0, delay: 0.1 })
         .to(textItems[1], { color: "#fff" }, "<")
-        .to(textItems[2], { x: 0, opacity: 0.8 }, "<");
+        .to(textItems[2], { x: 0, opacity: 0.8 }, "<")
+        .from(buttons, { yPercent: 100, opacity: 0, stagger: 0.1 });
     });
 
     mm.add("(max-width: 991px)", () => {
@@ -260,12 +299,19 @@ window.Webflow.push(() => {
         gsap.set(textItem, { opacity: 0, x: "20%", color: RED });
       });
       const textTl = gsap
-        .timeline({ defaults: { ease: "circ.out", duration: 1 } })
+        .timeline({
+          scrollTrigger: {
+            trigger: ".section-platform-where",
+            start: "bottom bottom",
+          },
+          defaults: { ease: "circ.out", duration: 1 },
+        })
         .to(textItems[0], { x: 0, opacity: 0.8 })
         .to(textItems[0], { color: "#fff" })
         .to(textItems[1], { x: 0, opacity: 0.8 }, "<")
         .to(textItems[1], { color: "#fff" })
-        .to(textItems[2], { x: 0, opacity: 0.8 }, "<");
+        .to(textItems[2], { x: 0, opacity: 0.8 }, "<")
+        .from(buttons, { yPercent: 100, opacity: 0, stagger: 0.1 });
     });
   }
 
