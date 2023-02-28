@@ -70,7 +70,7 @@ window.Webflow.push(() => {
   const loadingWrapper = document.querySelector(".section-home-header");
   if (!loadingWrapper) return;
   const hasSeenLoader = getCookie(COOKIE_NAME);
-  if (!hasSeenLoader) {
+  if (!hasSeenLoader && window.innerWidth > 768) {
     typeWriterIntro();
     setCookie(COOKIE_NAME, "true", 1);
   } else {
@@ -270,7 +270,7 @@ window.Webflow.push(() => {
           scrub: true,
         },
       })
-      .to(".provide-text-wrap", { yPercent: -150, ease: "none" });
+      .to(".provide-text-wrap", { yPercent: -100, ease: "none" });
   }
 
   function typeWriterIntro() {
