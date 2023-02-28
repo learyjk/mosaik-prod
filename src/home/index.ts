@@ -26,32 +26,30 @@ const BG_WHITE_GRADIENT = `linear-gradient(115deg, ${WHITE}, ${WHITE})`;
 window.Webflow ||= [];
 window.Webflow.push(() => {
   // pasue videos when offscreen, play when onscreen
-  // const observer = new IntersectionObserver((entries) => {
-  //   for (let i = 0; i < entries.length; i++) {
-  //     let video = entries[i].target as HTMLVideoElement;
-  //     if (i >= 2 && i <= 6) {
-  //       break;
-  //     } else if (entries[i].isIntersecting) {
-  //       video.play();
-  //       //console.log(`playing ${video}`);
-  //     } else {
-  //       video.pause();
-  //       //console.log(`pausing ${video}`);
-  //     }
-  //   }
-  // });
+  const observer = new IntersectionObserver((entries) => {
+    for (let i = 0; i < entries.length; i++) {
+      let video = entries[i].target as HTMLVideoElement;
+      if (i >= 2 && i <= 6) {
+        break;
+      } else if (entries[i].isIntersecting) {
+        video.play();
+        console.log(`playing ${video}`);
+      } else {
+        video.pause();
+        console.log(`pausing ${video}`);
+      }
+    }
+  });
 
   //loading videos
   const allVideos = document.querySelectorAll("video");
   // console.log({ videos: allVideos });
   // let loadedVideos = 0;
-  // allVideos.forEach((video) => {
-  //   observer.observe(video);
-  //   //video.addEventListener("canplay", handleVideoCanPlay);
-  //   //video.addEventListener("canplaythrough", handleVideoCanPlayThrough);
-  // });
-
-  function handleVideoCanPlay(event) {}
+  allVideos.forEach((video) => {
+    observer.observe(video);
+    //video.addEventListener("canplay", handleVideoCanPlay);
+    //video.addEventListener("canplaythrough", handleVideoCanPlayThrough);
+  });
 
   // function handleVideoCanPlayThrough(event) {
   //   loadedVideos++;
@@ -68,7 +66,7 @@ window.Webflow.push(() => {
   typeWriterIntro();
   platformAnimation();
   functionalitySuiteComponent();
-  pauseMeetMosaikVideoOnClose();
+  meetMosaikVideoController();
   let swiper = buildSwiper();
   initAnimations()
     .then(() => {
@@ -198,7 +196,6 @@ window.Webflow.push(() => {
         backgroundImage: BG_REDORANGE_GRADIENT,
       });
       //gsap.to(videoWrappers[stepNumber], { opacity: 1 });
-      console.log("reset video times");
       allVideos.forEach((video, index) => {
         if (index >= 2 && index <= 6) {
           video.currentTime = 0;
@@ -207,7 +204,7 @@ window.Webflow.push(() => {
     }
   }
 
-  function pauseMeetMosaikVideoOnClose() {
+  function meetMosaikVideoController() {
     const watchFilmButton = document.querySelector("#watch-film-button");
     const closeButton = document.querySelector("#watch-film-close-button");
     const meetMosaikVideo =
@@ -236,6 +233,8 @@ window.Webflow.push(() => {
   }
 
   function typeWriterIntro() {
+    document.body.classList.toggle("no-scroll");
+    const homeHeader = document.querySelector(".section-home-header");
     document.querySelector(".placeholder-text")?.remove();
     const words = ["Every superhero needs a sidekick..."];
 
@@ -247,27 +246,27 @@ window.Webflow.push(() => {
       ease: "power4.inout",
     });
 
-    let tlMaster = gsap.timeline();
+    let tlMaster = gsap.timeline({
+      onComplete: () => {
+        document.body.classList.toggle("no-scroll");
+        gsap.set(homeHeader, { display: "none" });
+      },
+    });
 
     words.forEach((word) => {
       let tlText = gsap.timeline();
       tlText.to("#animated-text", { duration: 3, delay: 2, text: word });
-      tlMaster.add(tlText);
+      tlMaster.add(tlText).to(homeHeader, {
+        yPercent: -100,
+      });
     });
   }
 
   function platformAnimation() {
-    console.log("platform animation");
     const box = document.querySelector(".animated-text-box");
     const textItems = box?.querySelectorAll(".animated-text-phrase");
     const buttons = document.querySelectorAll('[platform-anim="button"]');
-    console.log(buttons);
     if (!box || !textItems || !buttons) return;
-
-    const totalWidth = getComputedStyle(box).width;
-    const widths = [...textItems].map((item) => getComputedStyle(item).width);
-
-    console.log({ widths });
 
     let mm = gsap.matchMedia();
 
@@ -346,7 +345,7 @@ window.Webflow.push(() => {
       start: "top bottom",
       onToggle: () => {
         setTimeout(() => {
-          console.log(`set time ${LOTTIE_DURATION} seconds!`);
+          //console.log(`set time ${LOTTIE_DURATION} seconds!`);
           laptopVideos[0].currentTime = 0;
         }, LOTTIE_DURATION * 1000);
       },
