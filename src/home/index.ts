@@ -5,6 +5,7 @@ import { TextPlugin } from "gsap/TextPlugin";
 import { Flip } from "gsap/Flip";
 import Swiper, { Navigation } from "swiper";
 import { initAnimations } from "../utils/initAnimations";
+import { getCookie, setCookie } from "./cookieHelper";
 import "swiper/css/bundle";
 
 gsap.registerPlugin(TextPlugin, ScrollTrigger, ScrollToPlugin, Flip);
@@ -33,10 +34,10 @@ window.Webflow.push(() => {
         break;
       } else if (entries[i].isIntersecting) {
         video.play();
-        console.log(`playing ${video}`);
+        //console.log(`playing ${video}`);
       } else {
         video.pause();
-        console.log(`pausing ${video}`);
+        //console.log(`pausing ${video}`);
       }
     }
   });
@@ -63,10 +64,24 @@ window.Webflow.push(() => {
   // Observe the video element
   // allVideos.forEach((video) => observer.observe(video));
 
-  typeWriterIntro();
+  // show loader once per day
+  //typeWriterIntro();
+  const COOKIE_NAME = "seenLoader";
+  const loadingWrapper = document.querySelector(".section-home-header");
+  if (!loadingWrapper) return;
+  const hasSeenLoader = getCookie(COOKIE_NAME);
+  if (!hasSeenLoader) {
+    typeWriterIntro();
+    setCookie(COOKIE_NAME, "true", 1);
+  } else {
+    gsap.set(".section-home-header", { display: "none" });
+  }
+
   platformAnimation();
   functionalitySuiteComponent();
   meetMosaikVideoController();
+  provideStickyScrollAnimation();
+  cherryOnTopAnimation();
   let swiper = buildSwiper();
   initAnimations()
     .then(() => {
@@ -131,7 +146,7 @@ window.Webflow.push(() => {
         trigger: ".sticky-wrapper",
         start: "top top",
         end: "bottom bottom",
-        scrub: 0.5,
+        scrub: true,
       },
       defaults: {
         ease: "none",
@@ -144,7 +159,7 @@ window.Webflow.push(() => {
         trigger: ".sticky-wrapper",
         start: "top top",
         end: "bottom bottom",
-        scrub: 0.5,
+        scrub: true,
       },
       defaults: {
         ease: "none",
@@ -204,6 +219,19 @@ window.Webflow.push(() => {
     }
   }
 
+  function cherryOnTopAnimation() {
+    let tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: ".cherry-gradient-box",
+        start: "top bottom",
+        end: "top 50%",
+        scrub: true,
+      },
+    });
+
+    tl.from(".cherry", { yPercent: -200, rotateZ: -135 });
+  }
+
   function meetMosaikVideoController() {
     const watchFilmButton = document.querySelector("#watch-film-button");
     const closeButton = document.querySelector("#watch-film-close-button");
@@ -232,11 +260,32 @@ window.Webflow.push(() => {
     });
   }
 
+  function provideStickyScrollAnimation() {
+    gsap
+      .timeline({
+        scrollTrigger: {
+          trigger: ".provide-sticky-wrap",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: true,
+        },
+      })
+      .to(".provide-text-wrap", { yPercent: -150, ease: "none" });
+  }
+
   function typeWriterIntro() {
     document.body.classList.toggle("no-scroll");
     const homeHeader = document.querySelector(".section-home-header");
-    document.querySelector(".placeholder-text")?.remove();
-    const words = ["Every superhero needs a sidekick..."];
+    const introTextEl = document.querySelector(".placeholder-text");
+    const redDotTextEl = document.querySelector("#header-red-dot");
+    if (!redDotTextEl) return;
+    const dotWidth = getComputedStyle(redDotTextEl).width;
+    console.log({ dotWidth });
+
+    introTextEl?.remove();
+    const words = [introTextEl?.innerHTML];
+
+    //gsap.set("is-hero-red-dot");
 
     gsap.to("#cursor", {
       opacity: 0,
@@ -248,18 +297,42 @@ window.Webflow.push(() => {
 
     let tlMaster = gsap.timeline({
       onComplete: () => {
-        document.body.classList.toggle("no-scroll");
-        gsap.set(homeHeader, { display: "none" });
+        const updatedRedDot = document.querySelector("#header-red-dot");
+        const animatedDivs = document.querySelectorAll('[intro-anim="div"]');
+        if (!updatedRedDot) return;
+        updatedRedDot!.append(...animatedDivs);
+        const tlAfter = gsap.timeline({
+          onComplete: () => {
+            document.body.classList.toggle("no-scroll");
+          },
+        });
+        tlAfter
+          .to(updatedRedDot, { rotateZ: 45 })
+          .to(animatedDivs, {
+            scale: 120,
+            duration: 2,
+            stagger: {
+              each: 0.5,
+            },
+          })
+          .to(homeHeader, { yPercent: -100, opacity: 0 }, ">-=0.5")
+          .from("#mm-bottom-light", { opacity: 0, yPercent: 50 }, "<+0.2")
+          .from("#mm-header", { opacity: 0, yPercent: 100 }, "<+=0.5")
+          .from("#mm-subtitle", { opacity: 0, yPercent: 100 }, ">-=0.2")
+          .from(".mm-confetti", { opacity: 0, yPercent: 15 })
+          .from("#mm-nav", { yPercent: -100 }, "<")
+          .set(homeHeader, { display: "none" });
+
+        //gsap.set(homeHeader, { display: "none" });
       },
     });
 
-    words.forEach((word) => {
-      let tlText = gsap.timeline();
-      tlText.to("#animated-text", { duration: 3, delay: 2, text: word });
-      tlMaster.add(tlText).to(homeHeader, {
-        yPercent: -100,
-      });
-    });
+    let tlText = gsap.timeline();
+    tlText.to("#animated-text", { duration: 2, delay: 1, text: words[0] });
+    tlMaster.add(tlText);
+    // .to(homeHeader, {
+    //   yPercent: -100,
+    // });
   }
 
   function platformAnimation() {
@@ -339,14 +412,17 @@ window.Webflow.push(() => {
   }
 
   function laptopOpening() {
-    const LOTTIE_DURATION = 1.6;
+    const LOTTIE_DURATION = 1.7;
     ScrollTrigger.create({
       trigger: ".swiper-control-wrap",
       start: "top bottom",
       onToggle: () => {
+        //console.log("reset playhead");
+        laptopVideos[0].currentTime = 0;
+        laptopVideos[0].pause();
         setTimeout(() => {
           //console.log(`set time ${LOTTIE_DURATION} seconds!`);
-          laptopVideos[0].currentTime = 0;
+          laptopVideos[0].play();
         }, LOTTIE_DURATION * 1000);
       },
     });
