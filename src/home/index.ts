@@ -224,12 +224,12 @@ window.Webflow.push(() => {
       scrollTrigger: {
         trigger: ".cherry-gradient-box",
         start: "top bottom",
-        end: "top 50%",
+        end: "top center",
         scrub: true,
       },
     });
 
-    tl.from(".cherry", { yPercent: -200, rotateZ: -135 });
+    tl.from(".cherry", { yPercent: -300, rotateZ: -135 });
   }
 
   function meetMosaikVideoController() {
@@ -275,6 +275,7 @@ window.Webflow.push(() => {
 
   function typeWriterIntro() {
     document.body.classList.toggle("no-scroll");
+    window.scrollTo(0, 0);
     const homeHeader = document.querySelector(".section-home-header");
     const introTextEl = document.querySelector(".placeholder-text");
     const redDotTextEl = document.querySelector("#header-red-dot");
@@ -303,6 +304,7 @@ window.Webflow.push(() => {
         updatedRedDot!.append(...animatedDivs);
         const tlAfter = gsap.timeline({
           onComplete: () => {
+            window.scrollTo(0, 0);
             document.body.classList.toggle("no-scroll");
           },
         });
