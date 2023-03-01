@@ -81,7 +81,7 @@ window.Webflow.push(() => {
   functionalitySuiteComponent();
   meetMosaikVideoController();
   provideStickyScrollAnimation();
-  cherryOnTopAnimation();
+  //cherryOnTopAnimation();
   let swiper = buildSwiper();
   initAnimations()
     .then(() => {
