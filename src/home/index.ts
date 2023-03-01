@@ -13,41 +13,43 @@ gsap.registerPlugin(TextPlugin, ScrollTrigger, ScrollToPlugin, Flip);
 const RED = "#ff576d";
 const ORANGE = "#fb913a";
 const NAVY = "#181d2c";
-const GRAY = "#3d414e";
-const WHITE = "#ffffff";
+export const GRAY = "#3d414e";
+export const WHITE = "#ffffff";
 const DARK_BLUE = "#4673D1";
 const LIGHT_BLUE = "#51BFE1";
 const PURPLE = "#928CDA";
 const PINK = "#FF576D";
-const BG_REDORANGE_GRADIENT = `linear-gradient(115deg, ${RED}, ${ORANGE})`;
+export const BG_REDORANGE_GRADIENT = `linear-gradient(115deg, ${RED}, ${ORANGE})`;
+export const BG_WHITE = `linear-gradient(115deg, ${WHITE}, ${WHITE})`;
 const BG_BLUE_GRADIENT = `linear-gradient(115deg, ${DARK_BLUE}, ${LIGHT_BLUE})`;
 const BG_PURPLEPINK_GRADIENT = `linear-gradient(115deg, ${PURPLE}, ${PINK})`;
 const BG_WHITE_GRADIENT = `linear-gradient(115deg, ${WHITE}, ${WHITE})`;
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
+  console.log("load");
   // pasue videos when offscreen, play when onscreen
-  const observer = new IntersectionObserver((entries) => {
-    for (let i = 0; i < entries.length; i++) {
-      let video = entries[i].target as HTMLVideoElement;
-      if (i >= 2 && i <= 6) {
-        break;
-      } else if (entries[i].isIntersecting) {
-        video.play();
-        //console.log(`playing ${video}`);
-      } else {
-        video.pause();
-        //console.log(`pausing ${video}`);
-      }
-    }
-  });
+  // const observer = new IntersectionObserver((entries) => {
+  //   for (let i = 0; i < entries.length; i++) {
+  //     let video = entries[i].target as HTMLVideoElement;
+  //     if (i >= 2 && i <= 6) {
+  //       break;
+  //     } else if (entries[i].isIntersecting) {
+  //       video.play();
+  //       //console.log(`playing ${video}`);
+  //     } else {
+  //       video.pause();
+  //       //console.log(`pausing ${video}`);
+  //     }
+  //   }
+  // });
 
   //loading videos
   const allVideos = document.querySelectorAll("video");
   // console.log({ videos: allVideos });
   // let loadedVideos = 0;
   allVideos.forEach((video) => {
-    observer.observe(video);
+    //observer.observe(video);
     //video.addEventListener("canplay", handleVideoCanPlay);
     //video.addEventListener("canplaythrough", handleVideoCanPlayThrough);
   });
