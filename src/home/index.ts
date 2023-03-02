@@ -380,9 +380,9 @@ window.Webflow.push(() => {
           .set(".wiper", { left: "auto", right: 0 })
           .set("#cursor", { height: 0 })
           .to(".wiper", {
-            width: "7.6vw",
+            width: 0,
             duration: 0.8,
-            scale: 0.8,
+            //scale: 0.8,
             stagger: 0.2,
             ease: "power4.out",
           })
