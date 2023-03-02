@@ -27,7 +27,6 @@ const BG_WHITE_GRADIENT = `linear-gradient(115deg, ${WHITE}, ${WHITE})`;
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
-  console.log("load");
   // pasue videos when offscreen, play when onscreen
   // const observer = new IntersectionObserver((entries) => {
   //   for (let i = 0; i < entries.length; i++) {
@@ -68,16 +67,17 @@ window.Webflow.push(() => {
 
   // show loader once per day
   //typeWriterIntro();
-  const COOKIE_NAME = "seenLoader";
-  const loadingWrapper = document.querySelector(".section-home-header");
-  if (!loadingWrapper) return;
-  const hasSeenLoader = getCookie(COOKIE_NAME);
-  if (!hasSeenLoader && window.innerWidth > 768) {
-    typeWriterIntro();
-    setCookie(COOKIE_NAME, "true", 1);
-  } else {
-    gsap.set(".section-home-header", { display: "none" });
-  }
+  typeWriterIntroGlitch();
+  // const COOKIE_NAME = "seenLoader";
+  // const loadingWrapper = document.querySelector(".section-home-header");
+  // if (!loadingWrapper) return;
+  // const hasSeenLoader = getCookie(COOKIE_NAME);
+  // if (!hasSeenLoader && window.innerWidth > 768) {
+  //   typeWriterIntro();
+  //   setCookie(COOKIE_NAME, "true", 1);
+  // } else {
+  //   gsap.set(".section-home-header", { display: "none" });
+  // }
 
   platformAnimation();
   functionalitySuiteComponent();
@@ -339,6 +339,74 @@ window.Webflow.push(() => {
     // });
   }
 
+  function typeWriterIntroGlitch() {
+    document.body.classList.toggle("no-scroll");
+    window.scrollTo(0, 0);
+    const homeHeader = document.querySelector(".section-home-header");
+    const introTextEl = document.querySelector(".placeholder-text");
+    const redDotTextEl = document.querySelector("#header-red-dot");
+    if (!redDotTextEl) return;
+
+    introTextEl?.remove();
+    const words = [introTextEl?.innerHTML];
+
+    //gsap.set("is-hero-red-dot");
+
+    gsap.to("#cursor", {
+      opacity: 0,
+      repeat: -1,
+      yoyo: true,
+      duration: 0.8,
+      ease: "power4.inout",
+    });
+
+    let tlMaster = gsap.timeline({
+      onComplete: () => {
+        const tlAfter = gsap.timeline({
+          onComplete: () => {
+            window.scrollTo(0, 0);
+            document.body.classList.toggle("no-scroll");
+          },
+        });
+        tlAfter
+          .to(".wiper", {
+            width: "100%",
+            duration: 0.5,
+            delay: 0.8,
+            stagger: 0.2,
+            ease: "power4.out",
+          })
+          .set(".intro-text", { opacity: 0 })
+          .set(".wiper", { left: "auto", right: 0 })
+          .set("#cursor", { height: 0 })
+          .to(".wiper", {
+            width: "7.6vw",
+            duration: 0.8,
+            scale: 0.8,
+            stagger: 0.2,
+            ease: "power4.out",
+          })
+          .to(homeHeader, {
+            xPercent: 100,
+            opacity: 0,
+            duration: 0.3,
+          })
+          .from("#mm-bottom-light", { opacity: 0, yPercent: 50 }, "<")
+          .from("#mm-header", { opacity: 0, yPercent: 100 }, "<+=0.5")
+          .from("#mm-subtitle", { opacity: 0, yPercent: 100 }, ">-=0.2")
+          .from(".mm-confetti", { opacity: 0, yPercent: 15 })
+          .from("#mm-nav", { yPercent: -100 }, "<")
+          .set(homeHeader, { display: "none" });
+
+        //gsap.set(homeHeader, { display: "none" });
+      },
+    });
+
+    let tlText = gsap.timeline();
+    tlText.to("#animated-text", { duration: 2, delay: 1, text: words[0] });
+    tlMaster.add(tlText);
+  }
+
   function platformAnimation() {
     const box = document.querySelector(".animated-text-box");
     const textItems = box?.querySelectorAll(".animated-text-phrase");
@@ -423,11 +491,11 @@ window.Webflow.push(() => {
       onToggle: () => {
         //console.log("reset playhead");
         laptopVideos[0].currentTime = 0;
-        laptopVideos[0].pause();
-        setTimeout(() => {
-          //console.log(`set time ${LOTTIE_DURATION} seconds!`);
-          laptopVideos[0].play();
-        }, LOTTIE_DURATION * 1000);
+        //laptopVideos[0].pause();
+        // setTimeout(() => {
+        //   //console.log(`set time ${LOTTIE_DURATION} seconds!`);
+        //   laptopVideos[0].play();
+        // }, LOTTIE_DURATION * 1000);
       },
     });
   }
