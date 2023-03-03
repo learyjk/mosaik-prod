@@ -4,9 +4,9 @@
  * @param cvalue The value to set for the cookie.
  * @param exdays The number of days until the cookie expires.
  */
-export function setCookie(cname: string, cvalue: string, exdays: number) {
+export function setCookie(cname: string, cvalue: string, milliseconds: number) {
   const d = new Date();
-  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+  d.setTime(d.getTime() + milliseconds);
   const expires = "expires=" + d.toUTCString();
   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }

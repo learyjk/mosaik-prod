@@ -66,18 +66,17 @@ window.Webflow.push(() => {
   // allVideos.forEach((video) => observer.observe(video));
 
   // show loader once per day
-  //typeWriterIntro();
-  typeWriterIntroGlitch();
-  // const COOKIE_NAME = "seenLoader";
-  // const loadingWrapper = document.querySelector(".section-home-header");
-  // if (!loadingWrapper) return;
-  // const hasSeenLoader = getCookie(COOKIE_NAME);
-  // if (!hasSeenLoader && window.innerWidth > 768) {
-  //   typeWriterIntro();
-  //   setCookie(COOKIE_NAME, "true", 1);
-  // } else {
-  //   gsap.set(".section-home-header", { display: "none" });
-  // }
+
+  const COOKIE_NAME = "seenLoader";
+  const loadingWrapper = document.querySelector(".section-home-header");
+  if (!loadingWrapper) return;
+  const hasSeenLoader = getCookie(COOKIE_NAME);
+  if (!hasSeenLoader /* && window.innerWidth > 768 */) {
+    typeWriterIntroGlitch();
+    setCookie(COOKIE_NAME, "true", 30 * 60 * 1000);
+  } else {
+    gsap.set(".section-home-header", { display: "none" });
+  }
 
   platformAnimation();
   functionalitySuiteComponent();
