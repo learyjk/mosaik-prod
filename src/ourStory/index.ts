@@ -1,5 +1,10 @@
 import { gsap } from "gsap";
-import { BG_REDORANGE_GRADIENT, BG_WHITE } from "../home/index";
+
+const RED = "#ff576d";
+const ORANGE = "#fb913a";
+const WHITE = "#ffffff";
+const BG_REDORANGE_GRADIENT = `linear-gradient(115deg, ${RED}, ${ORANGE})`;
+const BG_WHITE = `linear-gradient(115deg, ${WHITE}, ${WHITE})`;
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
