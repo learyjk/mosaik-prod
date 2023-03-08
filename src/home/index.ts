@@ -19,11 +19,16 @@ const DARK_BLUE = "#4673D1";
 const LIGHT_BLUE = "#51BFE1";
 const PURPLE = "#928CDA";
 const PINK = "#FF576D";
-export const BG_REDORANGE_GRADIENT = `linear-gradient(115deg, ${RED}, ${ORANGE})`;
+const GREEN = "#04A451";
 export const BG_WHITE = `linear-gradient(115deg, ${WHITE}, ${WHITE})`;
+export const BG_REDORANGE_GRADIENT = `linear-gradient(115deg, ${RED}, ${ORANGE})`;
 const BG_BLUE_GRADIENT = `linear-gradient(115deg, ${DARK_BLUE}, ${LIGHT_BLUE})`;
 const BG_PURPLEPINK_GRADIENT = `linear-gradient(115deg, ${PURPLE}, ${PINK})`;
+const BG_PURPLEORANGE_GRADIENT = `linear-gradient(115deg, ${PURPLE}, ${ORANGE})`;
+const BG_BLUE_PURPLE_GRADIENT = `linear-gradient(115deg, ${DARK_BLUE}, ${PURPLE})`;
+const BG_GREENBLUE_GRADIENT = `linear-gradient(115deg, ${GREEN}, ${LIGHT_BLUE})`;
 const BG_WHITE_GRADIENT = `linear-gradient(115deg, ${WHITE}, ${WHITE})`;
+const BG_NAVY_NAVY = `linear-gradient(115deg, ${NAVY}, ${NAVY})`;
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
@@ -67,6 +72,8 @@ window.Webflow.push(() => {
 
   // show loader once per day
 
+  let url = window.location;
+
   const COOKIE_NAME = "seenLoader";
   const loadingWrapper = document.querySelector(".section-home-header");
   if (!loadingWrapper) return;
@@ -82,6 +89,7 @@ window.Webflow.push(() => {
   functionalitySuiteComponent();
   meetMosaikVideoController();
   provideStickyScrollAnimation();
+  everythingButtons();
   //cherryOnTopAnimation();
   let swiper = buildSwiper();
   initAnimations()
@@ -272,6 +280,34 @@ window.Webflow.push(() => {
         },
       })
       .to(".provide-text-wrap", { yPercent: -100, ease: "none" });
+  }
+
+  function everythingButtons() {
+    const buttons = document.querySelectorAll("[everything-button]");
+    console.log({ buttons });
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        let attrValue = button.getAttribute("everything-button");
+        if (attrValue === "collab-search") {
+          lenis.scrollTo("#section-breaks-mold", { immediate: true });
+        }
+        if (attrValue === "listing-mgmt") {
+          lenis.scrollTo("#section-seal", { immediate: true });
+        }
+        if (attrValue === "transaction-mgmt") {
+          lenis.scrollTo("#section-seal", { immediate: true });
+        }
+        if (attrValue === "forms") {
+          lenis.scrollTo("#section-forms", { immediate: true });
+        }
+        if (attrValue === "client-experience") {
+          lenis.scrollTo("#section-home-run", { immediate: true });
+        }
+        if (attrValue === "advanced-analytics") {
+          lenis.scrollTo("#section-advanced-analytics", { immediate: true });
+        }
+      });
+    });
   }
 
   function typeWriterIntro() {
