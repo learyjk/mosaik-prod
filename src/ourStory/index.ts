@@ -6,8 +6,6 @@ const WHITE = "#ffffff";
 const BG_REDORANGE_GRADIENT = `linear-gradient(115deg, ${RED}, ${ORANGE})`;
 const BG_WHITE = `linear-gradient(115deg, ${WHITE}, ${WHITE})`;
 
-console.log("loaded");
-
 window.Webflow ||= [];
 window.Webflow.push(() => {
   const questionElements = document.querySelectorAll(".faq1_question");
