@@ -284,7 +284,6 @@ window.Webflow.push(() => {
 
   function everythingButtons() {
     const buttons = document.querySelectorAll("[everything-button]");
-    console.log({ buttons });
     buttons.forEach((button) => {
       button.addEventListener("click", () => {
         let attrValue = button.getAttribute("everything-button");

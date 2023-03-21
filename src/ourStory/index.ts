@@ -6,6 +6,8 @@ const WHITE = "#ffffff";
 const BG_REDORANGE_GRADIENT = `linear-gradient(115deg, ${RED}, ${ORANGE})`;
 const BG_WHITE = `linear-gradient(115deg, ${WHITE}, ${WHITE})`;
 
+console.log("loaded");
+
 window.Webflow ||= [];
 window.Webflow.push(() => {
   const questionElements = document.querySelectorAll(".faq1_question");
@@ -31,4 +33,23 @@ window.Webflow.push(() => {
       gsap.to(bgMidnightEls[index], { opacity: 0 });
     });
   });
+
+  setupScrollBall();
 });
+
+function setupScrollBall() {
+  const scrollBall = document.querySelector<HTMLAnchorElement>("#scroll-ball");
+  const sections = document.querySelectorAll<HTMLDivElement>("[section]");
+  scrollBall?.addEventListener("click", () => {
+    const currentScrollPosition = window.scrollY;
+
+    for (const section of sections) {
+      const rect = section.getBoundingClientRect();
+      const y = rect.top + window.scrollY;
+      if (currentScrollPosition <= y - 60) {
+        lenis.scrollTo(y - 60);
+        break;
+      }
+    }
+  });
+}
