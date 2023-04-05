@@ -544,11 +544,11 @@ window.Webflow.push(() => {
 
     mm.add("(max-width: 768px)", () => {
       // this setup code only runs when viewport is less than 768px wide
-      const laptopWrap = document.querySelector("#laptop-wrap-container");
+      const laptopWrap = document.querySelector("#laptop-section");
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: laptopWrap,
-          start: "top 10%",
+          start: "top top",
           end: "+=1000",
           pin: true,
           scrub: true,
@@ -615,7 +615,10 @@ window.Webflow.push(() => {
         )
         .to(swiperControlTexts[2], { color: WHITE, height: "auto" }, "<")
         .to(swiperControlTexts[2], { height: 0 })
-        .set(swiperControlHeadings[2], { backgroundImage: initialGrayHeading });
+        .set(swiperControlHeadings[2], {
+          backgroundImage: initialGrayHeading,
+        })
+        .set(laptopWrap, { height: 0 });
 
       return () => {
         // optional
