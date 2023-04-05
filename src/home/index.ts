@@ -618,7 +618,15 @@ window.Webflow.push(() => {
         .set(swiperControlHeadings[2], {
           backgroundImage: initialGrayHeading,
         })
-        .set(laptopWrap, { height: 0 });
+        .set(laptopWrap, {
+          height: 0,
+          onComplete: () => {
+            console.log("restart webflow");
+            Webflow.destroy();
+            Webflow.ready();
+            Webflow.require("ix2").init();
+          },
+        });
 
       return () => {
         // optional
