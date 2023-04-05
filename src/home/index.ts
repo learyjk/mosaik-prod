@@ -548,8 +548,8 @@ window.Webflow.push(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: laptopWrap,
-          start: "top top",
-          end: "+=1000",
+          start: "top 10%",
+          end: "+=1000px",
           pin: true,
           scrub: true,
         },
