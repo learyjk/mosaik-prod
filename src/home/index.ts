@@ -97,6 +97,7 @@ window.Webflow.push(() => {
       console.info("finished loading animations");
       swiperController(swiper);
       laptopOpening();
+      laptopMobile(swiper);
     })
     .catch((error) => {
       console.error("error loading animations");
@@ -531,6 +532,91 @@ window.Webflow.push(() => {
         //   laptopVideos[0].play();
         // }, LOTTIE_DURATION * 1000);
       },
+    });
+  }
+
+  function laptopMobile(swiper: Swiper) {
+    let mm = gsap.matchMedia();
+
+    mm.add("(max-width: 768px)", () => {
+      // this setup code only runs when viewport is less than 768px wide
+      const laptopWrap = document.querySelector("#laptop-wrap-container");
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: laptopWrap,
+          start: "top 10%",
+          end: "+=1000",
+          pin: true,
+          scrub: true,
+        },
+      });
+
+      const swiperControlWrap = document.querySelector<HTMLDivElement>(
+        ".swiper-control-wrap"
+      );
+      const swiperControlAnchors = swiperControlWrap?.querySelectorAll(
+        ".swiper-control"
+      ) as NodeListOf<HTMLAnchorElement>;
+      const swiperControlHeadings = swiperControlWrap?.querySelectorAll(
+        ".swiper-control_heading"
+      ) as NodeListOf<HTMLHeadingElement>;
+      const swiperControlTexts = swiperControlWrap?.querySelectorAll(
+        ".swiper-control_text"
+      ) as NodeListOf<HTMLParagraphElement>;
+
+      swiperControlAnchors.forEach((anchor) => {
+        anchor.style.pointerEvents = "none";
+        anchor.style.cursor = "default";
+      });
+
+      const initialGrayHeading = getComputedStyle(
+        swiperControlHeadings[1]
+      ).backgroundImage;
+
+      gsap.set(swiperControlHeadings[0], {
+        backgroundImage: BG_BLUE_GRADIENT,
+      });
+      gsap.set(swiperControlTexts[0], { color: WHITE, height: "auto" });
+
+      tl.to(swiperControlTexts[0], { height: 0 })
+        .set(swiperControlHeadings[0], { backgroundImage: initialGrayHeading })
+        .to(
+          swiperControlHeadings[1],
+          {
+            backgroundImage: BG_PURPLEPINK_GRADIENT,
+            onStart: () => {
+              swiper.slideTo(1);
+            },
+            onReverseComplete: () => {
+              swiper.slideTo(0);
+            },
+          },
+          "<"
+        )
+        .to(swiperControlTexts[1], { color: WHITE, height: "auto" }, "<")
+        .to(swiperControlTexts[1], { height: 0 })
+        .set(swiperControlHeadings[1], { backgroundImage: initialGrayHeading })
+        .to(
+          swiperControlHeadings[2],
+          {
+            backgroundImage: BG_REDORANGE_GRADIENT,
+            onStart: () => {
+              swiper.slideTo(2);
+            },
+            onReverseComplete: () => {
+              swiper.slideTo(1);
+            },
+          },
+          "<"
+        )
+        .to(swiperControlTexts[2], { color: WHITE, height: "auto" }, "<")
+        .to(swiperControlTexts[2], { height: 0 })
+        .set(swiperControlHeadings[2], { backgroundImage: initialGrayHeading });
+
+      return () => {
+        // optional
+        // custom cleanup code here (runs when it STOPS matching)
+      };
     });
   }
 
