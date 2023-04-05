@@ -95,8 +95,12 @@ window.Webflow.push(() => {
   initAnimations()
     .then(() => {
       console.info("finished loading animations");
-      swiperController(swiper);
       laptopOpening();
+      let mm = gsap.matchMedia();
+      mm.add("(min-width: 768px)", () => {
+        // viewport is >= 768px
+        swiperController(swiper);
+      });
       laptopMobile(swiper);
     })
     .catch((error) => {
