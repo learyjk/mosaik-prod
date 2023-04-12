@@ -95,13 +95,13 @@ window.Webflow.push(() => {
   initAnimations()
     .then(() => {
       console.info("finished loading animations");
-      laptopOpening();
+      laptopOpenSetFirstVideoTime();
       let mm = gsap.matchMedia();
       mm.add("(min-width: 768px)", () => {
         // viewport is >= 768px
         swiperController(swiper);
       });
-      laptopMobile(swiper);
+      //laptopMobile(swiper);
     })
     .catch((error) => {
       console.error("error loading animations");
@@ -522,7 +522,7 @@ window.Webflow.push(() => {
     return swiperMain;
   }
 
-  function laptopOpening() {
+  function laptopOpenSetFirstVideoTime() {
     const LOTTIE_DURATION = 1.7;
     ScrollTrigger.create({
       trigger: ".swiper-control-wrap",
@@ -622,9 +622,6 @@ window.Webflow.push(() => {
           height: 0,
           onComplete: () => {
             console.log("restart webflow");
-            Webflow.destroy();
-            Webflow.ready();
-            Webflow.require("ix2").init();
           },
         });
 
