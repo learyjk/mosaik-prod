@@ -84,6 +84,15 @@ document.addEventListener("DOMContentLoaded", () => {
       nextButton.classList.remove("hide");
     }
 
+    // first step logic to redirect to demo page
+    if (currentStep === 0) {
+      const seeDemoRadio =
+        document.querySelector<HTMLInputElement>("#See-a-demo");
+      if (seeDemoRadio?.checked) {
+        window.location.href = `${window.location.origin}/get-a-demo`;
+      }
+    }
+
     // update next button
     if (isValid) {
       nextButton.classList.remove("disabled");

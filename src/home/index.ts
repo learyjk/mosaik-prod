@@ -80,7 +80,7 @@ window.Webflow.push(() => {
   const hasSeenLoader = getCookie(COOKIE_NAME);
   if (!hasSeenLoader /* && window.innerWidth > 768 */) {
     typeWriterIntroGlitch();
-    setCookie(COOKIE_NAME, "true", 30 * 60 * 1000);
+    setCookie(COOKIE_NAME, "true", 12 * 60 * 60 * 1000); // 12 hours to ms
   } else {
     gsap.set(".section-home-header", { display: "none" });
   }
