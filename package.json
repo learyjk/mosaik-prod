@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "serve",
-    "build": "esbuild ./src/ourStory/* ./src/home/* ./src/utils/* ./src/demo/* ./src/get-started/* --bundle --sourcemap --minify --outdir=dist --watch",
+    "build": "esbuild ./src/ourStory/* ./src/home/* ./src/utils/* ./src/demo/* ./src/get-started/* ./src/product/* --bundle --sourcemap --minify --outdir=dist --watch",
     "format": "prettier src/*.ts -w"
   },
   "repository": {
