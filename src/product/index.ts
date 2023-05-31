@@ -33,7 +33,7 @@ window.Webflow ||= [];
 window.Webflow.push(() => {
   const allVideos = document.querySelectorAll("video");
 
-  platformAnimation();
+  // platformAnimation();
   functionalitySuiteComponent();
   provideStickyScrollAnimation();
   everythingButtons();

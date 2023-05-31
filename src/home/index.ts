@@ -43,13 +43,65 @@ window.Webflow.push(() => {
     gsap.set(".section-home-header", { display: "none" });
   }
 
-  // platformAnimation();
+  platformAnimation();
   // functionalitySuiteComponent();
   meetMosaikVideoController();
   // provideStickyScrollAnimation();
   // everythingButtons();
   //cherryOnTopAnimation();
   // let swiper = buildSwiper();
+
+  function platformAnimation() {
+    const box = document.querySelector(".animated-text-box");
+    const textItems = box?.querySelectorAll(".animated-text-phrase");
+    const buttons = document.querySelectorAll('[platform-anim="button"]');
+    if (!box || !textItems || !buttons) return;
+
+    let mm = gsap.matchMedia();
+
+    mm.add("(min-width: 992px)", () => {
+      textItems?.forEach((textItem) => {
+        gsap.set(textItem, { opacity: 0, x: "20%", color: RED });
+        gsap.set(box, { x: "25%" });
+      });
+      const textTl = gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: ".section-platform-where",
+            start: "bottom bottom",
+          },
+          defaults: { ease: "circ.out", duration: 0.8 },
+        })
+        .to(textItems[0], { x: 0, opacity: 0.8 })
+        .to(box, { x: "12.5%", delay: 0.1 })
+        .to(textItems[0], { color: "#fff" }, "<")
+        .to(textItems[1], { x: 0, opacity: 0.8 }, "<")
+        .to(box, { x: 0, delay: 0.1 })
+        .to(textItems[1], { color: "#fff" }, "<")
+        .to(textItems[2], { x: 0, opacity: 0.8 }, "<")
+        .from(buttons, { yPercent: 100, opacity: 0, stagger: 0.1 });
+    });
+
+    mm.add("(max-width: 991px)", () => {
+      textItems?.forEach((textItem) => {
+        gsap.set(textItem, { opacity: 0, x: "20%", color: RED });
+      });
+      const textTl = gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: ".section-platform-where",
+            start: "bottom bottom",
+          },
+          defaults: { ease: "circ.out", duration: 1 },
+        })
+        .to(textItems[0], { x: 0, opacity: 0.8 })
+        .to(textItems[0], { color: "#fff" })
+        .to(textItems[1], { x: 0, opacity: 0.8 }, "<")
+        .to(textItems[1], { color: "#fff" })
+        .to(textItems[2], { x: 0, opacity: 0.8 }, "<")
+        .from(buttons, { yPercent: 100, opacity: 0, stagger: 0.1 });
+    });
+  }
 
   function meetMosaikVideoController() {
     const watchFilmButton = document.querySelector("#watch-film-button");
