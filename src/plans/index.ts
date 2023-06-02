@@ -13,7 +13,7 @@ enum SELECTORS {
   INPUT_FIELDS = ".plans_input-field",
   MONTHLY_COST = "#monthly-cost",
   IMPLEMENTATION_FEES = "#implementation-fee",
-  PLAN_NAME = "#plan-name",
+  PLAN_NAME = '[data-calc="plan-name"]',
   CHECKBOX = "#checkbox",
 }
 
@@ -43,7 +43,9 @@ const numAdmin = document.querySelector<HTMLInputElement>(SELECTORS.NUM_ADMIN);
 const numStates = document.querySelector<HTMLInputElement>(
   SELECTORS.NUM_STATES
 );
-const planNameEl = document.querySelector<HTMLSpanElement>(SELECTORS.PLAN_NAME);
+const planNameEls = document.querySelectorAll<HTMLSpanElement>(
+  SELECTORS.PLAN_NAME
+);
 const getStartedButton = document.querySelector<HTMLAnchorElement>(
   SELECTORS.GET_STARTED_BUTTON
 );
@@ -93,7 +95,8 @@ function showNextStep() {
       const plan = calculatePriceAndUpdateUI();
 
       if (plan === PLANS.ENTERPRISE || plan === PLANS.CUSTOM) {
-        window.location.href = `${window.location.origin}/get-started?activeTab=1`;
+        currentStep += 2;
+        tabLinks[currentStep].click();
       } else {
         currentStep++;
         tabLinks[currentStep].click();
@@ -191,7 +194,9 @@ function calculatePriceAndUpdateUI() {
 
   monthlyCostEl!.textContent = monthlyFee.toString();
   implementationFeeEl!.textContent = implementationFee.toString();
-  planNameEl!.textContent = planName;
+  planNameEls.forEach((el) => {
+    el.textContent = planName;
+  });
 
   return planName;
 }

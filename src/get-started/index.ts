@@ -22,7 +22,7 @@ window.addEventListener("load", () => {
   if (!submitButton) return;
   debug && console.log("selectors finished");
 
-  checkIfRedirect();
+  //checkIfRedirect();
 
   // set current step to start form
   let currentStep = 0;
