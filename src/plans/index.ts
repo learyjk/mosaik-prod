@@ -32,6 +32,10 @@ const inputFields = document.querySelectorAll<HTMLInputElement>(
   SELECTORS.INPUT_FIELDS
 );
 
+const businessTypeSelect = document.querySelector<HTMLSelectElement>(
+  SELECTORS.BUSINESS_TYPE
+);
+
 const numAgents = document.querySelector<HTMLInputElement>(
   SELECTORS.NUM_AGENTS
 );
@@ -136,7 +140,7 @@ function calculatePriceAndUpdateUI() {
 
   const numUsers =
     parseInt(numAgents!.value, 10) + parseInt(numAdmin!.value, 10);
-  const businessType = inputFields[3].value;
+  const businessType = businessTypeSelect!.value;
 
   // plan
   if (businessType === "Brokerage" || businessType === "MLS") {
