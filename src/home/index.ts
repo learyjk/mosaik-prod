@@ -3,8 +3,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { TextPlugin } from "gsap/TextPlugin";
 import { Flip } from "gsap/Flip";
-import Swiper, { Navigation } from "swiper";
-import { initAnimations } from "../utils/initAnimations";
+// import Swiper, { Navigation } from "swiper";
+// import { initAnimations } from "../utils/initAnimations";
 import { getCookie, setCookie } from "./cookieHelper";
 import "swiper/css/bundle";
 
