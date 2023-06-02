@@ -94,6 +94,8 @@ function showNextStep() {
       // go to last step
       const plan = calculatePriceAndUpdateUI();
 
+      scrollTo(0, 0);
+
       if (plan === PLANS.ENTERPRISE || plan === PLANS.CUSTOM) {
         currentStep += 2;
         tabLinks[currentStep].click();
