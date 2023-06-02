@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
   let debug = true;
   const form = document.querySelector<HTMLFormElement>("form");
   if (!form) return;
@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
   );
   if (!submitButton) return;
   debug && console.log("selectors finished");
+
+  checkIfRedirect();
 
   // set current step to start form
   let currentStep = 0;
@@ -61,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "input"
       );
 
-    console.log({ stepInputs });
+    //console.log({ stepInputs });
     for (const input of stepInputs) {
       let isRequired = input.required;
       let isValid = checkInputValidity(input);
@@ -167,7 +169,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return true;
       } else {
-        return false;
+        document
+          .querySelector(".bg_radial-gradient")
+          ?.classList.remove("opacity-0");
+        document.querySelectorAll(".demo-shapes")?.forEach((demoShape) => {
+          demoShape.classList.remove("opacity-0");
+        });
+        return true;
+        // return false
       }
     });
   });
@@ -188,4 +197,35 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 500);
     }
   });
+
+  function checkIfRedirect() {
+    let urlParams = new URLSearchParams(window.location.search);
+    let activeTab = urlParams.get("activeTab");
+    if (activeTab === "1") {
+      // tabLinks[1].click();
+      // setTimeout(() => {
+      simulateClick(tabLinks[1]);
+      nextButton?.remove();
+      // }, 0);
+    }
+  }
+
+  function simulateClick(element: HTMLAnchorElement) {
+    // Add event listener that stops default actions.
+    element.addEventListener(
+      "click",
+      function (e) {
+        e.preventDefault();
+      },
+      false
+    );
+
+    let clickEvent = new MouseEvent("click", {
+      view: window,
+      bubbles: true,
+      cancelable: false,
+    });
+
+    element.dispatchEvent(clickEvent);
+  }
 });

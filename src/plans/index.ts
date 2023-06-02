@@ -24,7 +24,6 @@ enum PLANS {
   CUSTOM = "custom",
 }
 
-const steps = document.querySelectorAll<HTMLDivElement>(SELECTORS.STEP);
 const tabLinks = document.querySelectorAll<HTMLAnchorElement>(
   `${SELECTORS.TABS_MENU} a`
 );
@@ -39,9 +38,6 @@ const numAgents = document.querySelector<HTMLInputElement>(
 const numAdmin = document.querySelector<HTMLInputElement>(SELECTORS.NUM_ADMIN);
 const numStates = document.querySelector<HTMLInputElement>(
   SELECTORS.NUM_STATES
-);
-const businessType = document.querySelector<HTMLSelectElement>(
-  SELECTORS.BUSINESS_TYPE
 );
 const planNameEl = document.querySelector<HTMLSpanElement>(SELECTORS.PLAN_NAME);
 const getStartedButton = document.querySelector<HTMLAnchorElement>(
@@ -89,10 +85,15 @@ function showNextStep() {
         nextButton!.textContent = "Calculate Pricing";
       }
     } else {
-      calculatePriceAndUpdateUI();
       // go to last step
-      currentStep++;
-      tabLinks[currentStep].click();
+      const plan = calculatePriceAndUpdateUI();
+
+      if (plan === PLANS.ENTERPRISE || plan === PLANS.CUSTOM) {
+        window.location.href = `${window.location.origin}/get-started?activeTab=1`;
+      } else {
+        currentStep++;
+        tabLinks[currentStep].click();
+      }
     }
   }
 }
@@ -187,6 +188,8 @@ function calculatePriceAndUpdateUI() {
   monthlyCostEl!.textContent = monthlyFee.toString();
   implementationFeeEl!.textContent = implementationFee.toString();
   planNameEl!.textContent = planName;
+
+  return planName;
 }
 
 const checkbox = document.querySelector<HTMLInputElement>(SELECTORS.CHECKBOX);
