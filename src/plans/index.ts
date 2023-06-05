@@ -15,6 +15,7 @@ enum SELECTORS {
   IMPLEMENTATION_FEES = "#implementation-fee",
   PLAN_NAME = '[data-calc="plan-name"]',
   CHECKBOX = "#checkbox",
+  TEAM_MANAGEMENT = '[data-calc="team-management"]',
 }
 
 enum PLANS {
@@ -51,6 +52,9 @@ const getStartedButton = document.querySelector<HTMLAnchorElement>(
 );
 const nextButton = document.querySelector<HTMLAnchorElement>(
   SELECTORS.NEXT_BUTTON
+);
+const teamManagementEl = document.querySelector<HTMLSpanElement>(
+  SELECTORS.TEAM_MANAGEMENT
 );
 
 console.log({ rowWraps, inputFields });
@@ -153,6 +157,7 @@ function calculatePriceAndUpdateUI() {
   } else if (businessType === "Other") {
     planName = PLANS.CUSTOM;
   } else if (businessType === "Solo Agent") {
+    teamManagementEl!.style.display = "none";
     if (numUsers < 3) {
       planName = PLANS.INDIVIDUAL;
     } else {
@@ -181,7 +186,8 @@ function calculatePriceAndUpdateUI() {
   }
 
   // states
-  implementationFee += 100 * parseInt(numStates!.value, 10);
+  // add $100 for each additional state above 1
+  implementationFee += 100 * (parseInt(numStates!.value, 10) - 1);
 
   // updateUI
   const monthlyCostEl = document.querySelector<HTMLDivElement>(
