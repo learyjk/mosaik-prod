@@ -16,6 +16,7 @@ enum SELECTORS {
   PLAN_NAME = '[data-calc="plan-name"]',
   CHECKBOX = "#checkbox",
   TEAM_MANAGEMENT = '[data-calc="team-management"]',
+  BACK_BUTTON = '[data-calc="back-button"]',
 }
 
 enum PLANS {
@@ -55,6 +56,9 @@ const nextButton = document.querySelector<HTMLAnchorElement>(
 );
 const teamManagementEl = document.querySelector<HTMLSpanElement>(
   SELECTORS.TEAM_MANAGEMENT
+);
+const backButtons = document.querySelectorAll<HTMLAnchorElement>(
+  SELECTORS.BACK_BUTTON
 );
 
 console.log({ rowWraps, inputFields });
@@ -103,9 +107,11 @@ function showNextStep() {
       if (plan === PLANS.ENTERPRISE || plan === PLANS.CUSTOM) {
         currentStep += 2;
         tabLinks[currentStep].click();
+        makeBackButtonsVisible();
       } else {
         currentStep++;
         tabLinks[currentStep].click();
+        makeBackButtonsVisible();
       }
     }
   }
@@ -141,6 +147,13 @@ for (let i = 0; i < 3; i++) {
 nextButton?.classList.add("disabled");
 getStartedButton?.addEventListener("click", showNextStep);
 nextButton?.addEventListener("click", showNextStep);
+backButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    currentStep = 1;
+    tabLinks[currentStep].click();
+    makeBackButtonsInvisible();
+  });
+});
 
 function calculatePriceAndUpdateUI() {
   let implementationFee = 0;
@@ -224,3 +237,15 @@ checkbox?.addEventListener("change", (event) => {
     ).toString();
   }
 });
+
+function makeBackButtonsVisible() {
+  backButtons.forEach((button) => {
+    button!.classList.remove("off");
+  });
+}
+
+function makeBackButtonsInvisible() {
+  backButtons.forEach((button) => {
+    button!.classList.add("off");
+  });
+}
