@@ -24,6 +24,9 @@ enum PLANS {
   TEAM = "team",
   INDIVIDUAL = "individual",
   CUSTOM = "custom",
+  PRO = "pro",
+  GROW = "grow",
+  SCALE = "scale",
 }
 
 const tabLinks = document.querySelectorAll<HTMLAnchorElement>(
@@ -65,6 +68,10 @@ console.log({ rowWraps, inputFields });
 
 let currentStep = 0;
 let subStep = 0;
+
+if (numStates) {
+  numStates.value = "1";
+}
 
 gsap.fromTo(
   rowWraps[subStep],
@@ -171,14 +178,18 @@ function calculatePriceAndUpdateUI() {
     planName = PLANS.CUSTOM;
   } else if (businessType === "Solo Agent") {
     teamManagementEl!.style.display = "none";
-    if (numUsers < 3) {
-      planName = PLANS.INDIVIDUAL;
+    if (numUsers < 2) {
+      planName = PLANS.PRO;
     } else {
-      planName = PLANS.TEAM;
+      planName = PLANS.GROW;
     }
   } else if (businessType === "Team") {
-    if (numUsers < 51) {
-      planName = PLANS.TEAM;
+    if (numUsers < 2) {
+      planName = PLANS.PRO;
+    } else if (numUsers < 6) {
+      planName = PLANS.GROW;
+    } else if (numUsers < 51) {
+      planName = PLANS.SCALE;
     } else {
       planName = PLANS.CUSTOM;
     }
@@ -188,13 +199,13 @@ function calculatePriceAndUpdateUI() {
 
   // cost
   if (numUsers === 1) {
-    implementationFee = 150;
+    implementationFee = 250;
     monthlyFee = 75;
   } else if (numUsers < 6) {
     implementationFee = 250;
     monthlyFee = 60;
   } else {
-    implementationFee = 350;
+    implementationFee = 450;
     monthlyFee = 50;
   }
 
