@@ -70,6 +70,7 @@ let currentStep = 0;
 let subStep = 0;
 
 if (numStates) {
+  console.log("set num states to 1");
   numStates.value = "1";
 }
 
@@ -100,14 +101,20 @@ function showNextStep() {
           },
         }
       );
-      if (subStep !== 3) {
+      if (inputFields[subStep].value === "") {
         nextButton?.classList.add("disabled");
+      } else if (subStep === 2) {
+        // do nothing
       } else {
+        nextButton?.classList.add("disabled");
         nextButton!.textContent = "Calculate Pricing";
       }
     } else {
       // go to last step
       const plan = calculatePriceAndUpdateUI();
+      if (plan !== "") {
+        nextButton?.classList.remove("disabled");
+      }
 
       scrollTo(0, 0);
 
@@ -124,13 +131,48 @@ function showNextStep() {
   }
 }
 
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 4; i++) {
   let input = inputFields[i];
   input.addEventListener("input", (event) => {
-    if (input.value === "") {
+    console.log({ subStep });
+    let val = input.value;
+    if (i === 3) {
+      // dropdown
+      const select = input.querySelector<HTMLSelectElement>("select");
+      val = select?.value as string;
+    }
+    console.log({ val });
+
+    if (val === "") {
       nextButton?.classList.add("disabled");
     } else {
       nextButton?.classList.remove("disabled");
+    }
+
+    // end - need to check all values each input
+    if (subStep === 3) {
+      let allFilled = true;
+      inputFields.forEach((field, index) => {
+        let fieldVal = field.value;
+
+        console.log({ index });
+        if (index === 3) {
+          // dropdown
+          console.log("dropdown?");
+          const select = field.querySelector<HTMLSelectElement>("select");
+          fieldVal = select?.value as string;
+        }
+        console.log({ fieldVal });
+        if (fieldVal === "" || fieldVal === undefined) {
+          allFilled = false;
+        }
+        console.log({ allFilled });
+      });
+      if (allFilled) {
+        nextButton?.classList.remove("disabled");
+      } else {
+        nextButton?.classList.add("disabled");
+      }
     }
 
     const lastText = document.querySelectorAll(".plans_input-text")[3];
