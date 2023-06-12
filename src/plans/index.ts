@@ -20,7 +20,7 @@ enum SELECTORS {
 }
 
 enum PLANS {
-  ENTERPRISE = "the enterprise",
+  ENTERPRISE = "enterprise",
   TEAM = "team",
   INDIVIDUAL = "individual",
   CUSTOM = "custom",
