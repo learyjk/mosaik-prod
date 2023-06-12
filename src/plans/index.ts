@@ -239,6 +239,7 @@ function calculatePriceAndUpdateUI() {
       planName = PLANS.GROW;
     } else if (numUsers < 51) {
       planName = PLANS.SCALE;
+      28;
     } else {
       planName = PLANS.CUSTOM;
     }
@@ -249,6 +250,8 @@ function calculatePriceAndUpdateUI() {
   // make dom updates
   if (planName === PLANS.PRO) {
     teamManagementEl!.style.display = "none";
+  } else {
+    teamManagementEl!.style.display = "flex";
   }
 
   // cost
