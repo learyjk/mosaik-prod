@@ -20,7 +20,7 @@ enum SELECTORS {
 }
 
 enum PLANS {
-  ENTERPRISE = "enterprise",
+  ENTERPRISE = "the enterprise",
   TEAM = "team",
   INDIVIDUAL = "individual",
   CUSTOM = "custom",
@@ -63,6 +63,7 @@ const teamManagementEl = document.querySelector<HTMLSpanElement>(
 const backButtons = document.querySelectorAll<HTMLAnchorElement>(
   SELECTORS.BACK_BUTTON
 );
+const checkbox = document.querySelector<HTMLInputElement>(SELECTORS.CHECKBOX);
 
 console.log({ rowWraps, inputFields });
 
@@ -198,6 +199,9 @@ getStartedButton?.addEventListener("click", showNextStep);
 nextButton?.addEventListener("click", showNextStep);
 backButtons.forEach((button) => {
   button.addEventListener("click", () => {
+    if (checkbox?.checked) {
+      checkbox!.click();
+    }
     currentStep = 1;
     tabLinks[currentStep].click();
     makeBackButtonsInvisible();
@@ -219,7 +223,6 @@ function calculatePriceAndUpdateUI() {
   } else if (businessType === "Other") {
     planName = PLANS.CUSTOM;
   } else if (businessType === "Solo Agent") {
-    teamManagementEl!.style.display = "none";
     if (numUsers < 2) {
       planName = PLANS.PRO;
     } else {
@@ -239,15 +242,20 @@ function calculatePriceAndUpdateUI() {
     planName = PLANS.CUSTOM;
   }
 
+  // make dom updates
+  if (planName === PLANS.PRO) {
+    teamManagementEl!.style.display = "none";
+  }
+
   // cost
   if (numUsers === 1) {
-    implementationFee = 250;
+    implementationFee = 200;
     monthlyFee = 75;
   } else if (numUsers < 6) {
-    implementationFee = 250;
+    implementationFee = 200;
     monthlyFee = 60;
   } else {
-    implementationFee = 450;
+    implementationFee = 350;
     monthlyFee = 50;
   }
 
@@ -275,7 +283,6 @@ function calculatePriceAndUpdateUI() {
   return planName;
 }
 
-const checkbox = document.querySelector<HTMLInputElement>(SELECTORS.CHECKBOX);
 checkbox?.addEventListener("change", (event) => {
   const monthlyCostEl = document.querySelector<HTMLDivElement>(
     SELECTORS.MONTHLY_COST
@@ -302,3 +309,10 @@ function makeBackButtonsInvisible() {
     button!.classList.add("off");
   });
 }
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    console.log("Enter key was pressed");
+    nextButton?.click();
+  }
+});
