@@ -225,8 +225,12 @@ function calculatePriceAndUpdateUI() {
   } else if (businessType === "Solo Agent") {
     if (numUsers < 2) {
       planName = PLANS.PRO;
-    } else {
+    } else if (numUsers < 6) {
       planName = PLANS.GROW;
+    } else if (numUsers < 51) {
+      planName = PLANS.SCALE;
+    } else {
+      planName = PLANS.CUSTOM;
     }
   } else if (businessType === "Team") {
     if (numUsers < 2) {
