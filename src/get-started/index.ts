@@ -14,6 +14,7 @@ window.addEventListener("load", () => {
     '[wb-data="next-button"]'
   );
   if (!nextButton) return;
+  const labels = form.querySelectorAll<HTMLLabelElement>("label");
   //   const backButton = document.querySelector<HTMLAnchorElement>('[wb-data="back-button"]');
   //   if (!backButton) return;
   const submitButton = form.querySelector<HTMLInputElement>(
@@ -121,7 +122,7 @@ window.addEventListener("load", () => {
     let type = oncomingForm.type;
     let value = oncomingForm.value;
     let isValid = checkInputValidity(oncomingForm);
-    updateUI(isValid);
+    updateUI(Boolean(isValid));
     tabLinks[currentStep].click();
   };
 
@@ -146,7 +147,9 @@ window.addEventListener("load", () => {
     };
   };
 
+  // @ts-ignore
   Webflow.push(function () {
+    // @ts-ignore
     $("form").submit(function () {
       if (currentStep === numberOfSteps - 1) {
         //backButton.classList.add('hide');
@@ -198,6 +201,20 @@ window.addEventListener("load", () => {
     }
   });
 
+  // get parameters from url
+  const urlParams = new URLSearchParams(window.location.search);
+  const isFromThankYouPage = urlParams.get("fromThankYouPage");
+  if (isFromThankYouPage) {
+    // click first label then click next
+    const firstLabel = document.querySelector<HTMLLabelElement>("label");
+    if (firstLabel) {
+      simulateClick(firstLabel);
+      setTimeout(() => {
+        nextButton?.click();
+      }, 0);
+    }
+  }
+
   function checkIfRedirect() {
     let urlParams = new URLSearchParams(window.location.search);
     let activeTab = urlParams.get("activeTab");
@@ -210,7 +227,7 @@ window.addEventListener("load", () => {
     }
   }
 
-  function simulateClick(element: HTMLAnchorElement) {
+  function simulateClick(element: HTMLAnchorElement | HTMLLabelElement) {
     // Add event listener that stops default actions.
     element.addEventListener(
       "click",
