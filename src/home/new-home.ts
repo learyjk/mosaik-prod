@@ -34,6 +34,7 @@ window.Webflow.push(() => {
   const allVideos = document.querySelectorAll("video");
 
   // platformAnimation();
+  showNavCta();
   meetMosaikVideoController();
   functionalitySuiteComponent();
   provideStickyScrollAnimation();
@@ -58,6 +59,18 @@ window.Webflow.push(() => {
   const laptopVideos = document.querySelectorAll(
     '[wb-data="laptop-video"]'
   ) as NodeListOf<HTMLVideoElement>;
+
+  function showNavCta() {
+    const el = document.querySelector(".button.is-nav.home-target");
+    if (!el) return;
+    gsap.to(el, {
+      display: "flex",
+      scrollTrigger: {
+        trigger: "#section-everything",
+        start: "top top",
+      },
+    });
+  }
 
   function functionalitySuiteComponent() {
     const bulletRows = document.querySelectorAll(
