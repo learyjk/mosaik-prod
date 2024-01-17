@@ -1,0 +1,2 @@
+(()=>{window.addEventListener("load",()=>{let t=!1,e=document.querySelector("form");!e||!e.querySelector('[wb-data="submit-button"]')||(t&&console.log("selectors finished"),Webflow.push(function(){$("form").submit(function(){return document.querySelector(".bg_radial-gradient")?.classList.remove("opacity-0"),document.querySelectorAll(".demo-shapes")?.forEach(o=>{o.classList.remove("opacity-0")}),!0})}))});})();
+//# sourceMappingURL=index.js.map

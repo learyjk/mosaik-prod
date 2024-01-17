@@ -1,5 +1,5 @@
 window.addEventListener("load", () => {
-  let debug = true;
+  let debug = false;
   const form = document.querySelector<HTMLFormElement>("form");
   if (!form) return;
   const wTabContent = form.querySelector<HTMLDivElement>(".w-tab-content");

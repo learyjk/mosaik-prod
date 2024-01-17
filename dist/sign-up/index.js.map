@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../src/sign-up/index.ts"],
+  "sourcesContent": ["window.addEventListener(\"load\", () => {\n  let debug = false;\n  const form = document.querySelector<HTMLFormElement>(\"form\");\n  if (!form) return;\n\n  const submitButton = form.querySelector<HTMLInputElement>(\n    '[wb-data=\"submit-button\"]'\n  );\n  if (!submitButton) return;\n  debug && console.log(\"selectors finished\");\n\n  // @ts-ignore\n  Webflow.push(function () {\n    // @ts-ignore\n    $(\"form\").submit(function () {\n      document\n        .querySelector(\".bg_radial-gradient\")\n        ?.classList.remove(\"opacity-0\");\n      document.querySelectorAll(\".demo-shapes\")?.forEach((demoShape) => {\n        demoShape.classList.remove(\"opacity-0\");\n      });\n\n      return true;\n    });\n  });\n});\n"],
+  "mappings": "MAAA,OAAO,iBAAiB,OAAQ,IAAM,CACpC,IAAIA,EAAQ,GACNC,EAAO,SAAS,cAA+B,MAAM,EACvD,CAACA,GAKD,CAHiBA,EAAK,cACxB,2BACF,IAEAD,GAAS,QAAQ,IAAI,oBAAoB,EAGzC,QAAQ,KAAK,UAAY,CAEvB,EAAE,MAAM,EAAE,OAAO,UAAY,CAC3B,gBACG,cAAc,qBAAqB,GAClC,UAAU,OAAO,WAAW,EAChC,SAAS,iBAAiB,cAAc,GAAG,QAASE,GAAc,CAChEA,EAAU,UAAU,OAAO,WAAW,CACxC,CAAC,EAEM,EACT,CAAC,CACH,CAAC,EACH,CAAC",
+  "names": ["debug", "form", "demoShape"]
+}
